@@ -10,11 +10,16 @@ import {
   CardMedia,
   Container,
   createTheme,
+  Dialog,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Divider,
   Grid,
   IconButton,
   Paper,
   Stack,
+  TextField,
   Toolbar,
   Typography,
 } from "@mui/material"
@@ -25,6 +30,7 @@ import axios from "axios"
 
 
 function App() {
+  const [open, setOpen] = useState(false)
   const [photos, setPhotos] = useState<any[]>([])
   useEffect(()=>{
     axios.get('https://jsonplaceholder.typicode.com/photos').then((res)=>setPhotos(res.data)).catch(er=>console.log(er))
@@ -34,6 +40,14 @@ function App() {
   function handleChange(event:any, newValue : any){
     setValue(newValue)
     console.log(value)
+  }
+
+  function handlerClickOpen(){
+    setOpen(true)
+  }
+
+  function handleClose(){
+    setOpen(false)
   }
 
   const theme = createTheme()
@@ -54,9 +68,17 @@ function App() {
               MUI Project
             </Typography>
             <Box marginRight={2}>
-              <Button color="inherit" variant="outlined">
+              <Button color="inherit" variant="outlined" onClick={handlerClickOpen}>
                 Log In
               </Button>
+              <Dialog open={open} onClose={handleClose}>
+                <DialogTitle align="center">Авторизация</DialogTitle>
+                <DialogContent>
+                  <DialogContentText>Введите свои данные для авторизации</DialogContentText>
+                  <TextField autoFocus margin="dense" variant="outlined" fullWidth label='Login' />
+                  <TextField autoFocus margin="dense" variant="outlined" fullWidth label='Password' />
+                </DialogContent>
+              </Dialog>
             </Box>
             <Button color="secondary" variant="contained">
               Sign Up
@@ -134,7 +156,6 @@ function App() {
       </main>
       <footer>
         <Typography variant="h6" align="center">
-          Footer
         </Typography>
         <BottomNavigation 
           value={value} 
